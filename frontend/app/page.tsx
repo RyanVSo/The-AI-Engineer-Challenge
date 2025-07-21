@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { streamChat, ChatRequest } from "../src/utils/api";
+import { streamChat } from "../src/utils/api";
 
 export default function ChatPage() {
   const [apiKey, setApiKey] = useState("");
@@ -24,8 +24,12 @@ export default function ChatPage() {
         },
         (chunk) => setResponse((prev) => prev + chunk)
       );
-    } catch (err: any) {
-      setError(err.message || "Unknown error");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Unknown error");
+      }
     } finally {
       setLoading(false);
     }
